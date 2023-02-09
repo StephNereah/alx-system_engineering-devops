@@ -1,2 +1,2 @@
 #!/bin/bash
-chmod dugo+x
+chmod -d o+x
