@@ -1,9 +1,30 @@
 #!/usr/bin/env bash
-# Install nginx on your web-01
-# Nginx should be listening on port 80
-# Print 'Hello World!'
+# This script installs and configures Nginx to serve a 'Hello World!' page
 
-sudo apt-get -y update
-sudo apt-get -y install nginx
-echo 'Hello World!' > /var/www/html/index.nginx-debian.html
-sudo service nginx start
+# Update package list
+apt-get update -y
+
+# Install Nginx
+apt-get install nginx -y
+
+# Create a custom index.html with 'Hello World!'
+echo "Hello World!" > /var/www/html/index.html
+
+# Reload Nginx to apply changes
+nginx -s reload
+
+# Ensure port 80 is open
+ufw allow 80/tcp
+ufw reload
+
+# Check if Nginx is running and listening on port 80
+if netstat -tuln | grep -q ':80'; then
+    echo "Nginx is listening on port 80."
+else
+    echo "Nginx is not listening on port 80."
+    exit 1
+fi
+
+# Optional: Check Nginx logs for any issues
+echo "Checking Nginx error logs..."
+cat /var/log/nginx/error.log
