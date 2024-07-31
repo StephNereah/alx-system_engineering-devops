@@ -1,15 +1,26 @@
 #!/usr/bin/env bash
-# Install nginx on your web-01
-# Nginx should be listening on port 80
-# Print 'Hello World!'
+# This script installs and configures Nginx to serve a 'Hello World!' page
 
-sudo apt-get -y update
-sudo apt-get install -y nginx
-sudo ufw allow  'Nginx HTTP'
-sudo service nginx start
+#update package list
+apt-get update -y
 
-echo "Hello World!" | sudo tee /var/www/html/index.html
+# Install nginx
+apt-get install nginx -y
 
-#Test nginx configuration
-sudo nginx -t
-sudo service nginx reload
+# Create a custom index.html with 'Hello World!'
+echo "Hello World!" > /var/www/html/index.html
+
+# Reload Nginx to apply changes
+nginx -s reload
+
+# Ensure port 80 is open (optional, based on your firewall configuration)
+ufw allow 'Nginx HTTP'
+
+
+
+
+
+
+
+
+
