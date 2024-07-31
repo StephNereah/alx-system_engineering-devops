@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# This script installs and configures Nginx to serve a 'Hello World!' page
+# This script installs and configures Nginx to serve a 'Hello World!'
 
 # Update package list
 apt-get update -y
@@ -10,21 +10,23 @@ apt-get install nginx -y
 # Create a custom index.html with 'Hello World!'
 echo "Hello World!" > /var/www/html/index.html
 
-# Reload Nginx to apply changes
+# Check if Nginx is running
+if pgrep -x "nginx" > /dev/null; then
+    echo "Nginx is running."
+else
+    echo "Nginx is not running. Starting Nginx..."
+    nginx
+fi
+
+# Reload Nginx configuration without using systemctl
 nginx -s reload
 
-# Ensure port 80 is open
-ufw allow 80/tcp
-ufw reload
+# Ensure port 80 is open using iptables
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 
-# Check if Nginx is running and listening on port 80
-if netstat -tuln | grep -q ':80'; then
+# Verify if Nginx is listening on port 80 using ss
+if ss -tuln | grep -q ':80'; then
     echo "Nginx is listening on port 80."
 else
     echo "Nginx is not listening on port 80."
-    exit 1
 fi
-
-# Optional: Check Nginx logs for any issues
-echo "Checking Nginx error logs..."
-cat /var/log/nginx/error.log
