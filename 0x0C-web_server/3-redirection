@@ -7,6 +7,9 @@ apt-get -y update
 apt-get -y install nginx
 service nginx start
 
+# Debugging: Check before applying the rewrite
+curl -I http://localhost/redirect_me || echo "Before rewrite: Failed to fetch /redirect_me"
+
 # Set the content of the index page
 echo "Hello World!" > /var/www/html/index.nginx-debian.html
 
@@ -15,3 +18,6 @@ sed -i "/server_name _;/ a\\\trewrite ^/redirect_me https://www.youtube.com/watc
 
 # Restart Nginx to apply the changes
 service nginx restart
+
+# Debugging: Check after applying the rewrite
+curl -I http://localhost/redirect_me || echo "After rewrite: Failed to fetch /redirect_me"
