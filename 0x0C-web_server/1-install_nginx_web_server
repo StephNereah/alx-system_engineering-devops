@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # This script installs and configures Nginx to serve a 'Hello World!' page
 
-apt-get -y update
-apt-get -y install nginx
-echo "Hello World!" > /var/www/html/index.nginx-debian.html
-service nginx start
+apt.get update -y
+apt.get install nginx -y
+sudo ufw allow 'Nginx HTTP'
+sh -c 'echo "Hello World!" > /var/www/html/index.html'
+service nginx restart
